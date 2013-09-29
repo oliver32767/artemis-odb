@@ -21,7 +21,7 @@ public class Bag<E> implements ImmutableBag<E> {
 	/**
 	 * The elements contained in bag.
 	 */
-	private int size = 0;
+	protected int size = 0;
 
 	/**
 	 * The iterator. It is only created once and reused when required.

@@ -24,11 +24,11 @@ public class World {
 	private ComponentManager cm;
 
 	public float delta;
-	private final Bag<Entity> added;
-	private final Bag<Entity> changed;
-	private final Bag<Entity> deleted;
-	private final Bag<Entity> enable;
-	private final Bag<Entity> disable;
+	private final WildBag<Entity> added;
+	private final WildBag<Entity> changed;
+	private final WildBag<Entity> deleted;
+	private final WildBag<Entity> enable;
+	private final WildBag<Entity> disable;
 
 	private final AddedPerformer addedPerformer;
 	private final ChangedPerformer changedPerformer;
@@ -49,11 +49,11 @@ public class World {
 		systems = new HashMap<Class<?>, EntitySystem>();
 		systemsBag = new Bag<EntitySystem>();
 
-		added = new Bag<Entity>();
-		changed = new Bag<Entity>();
-		deleted = new Bag<Entity>();
-		enable = new Bag<Entity>();
-		disable = new Bag<Entity>();
+		added = new WildBag<Entity>();
+		changed = new WildBag<Entity>();
+		deleted = new WildBag<Entity>();
+		enable = new WildBag<Entity>();
+		disable = new WildBag<Entity>();
 		
 		addedPerformer = new AddedPerformer();
 		changedPerformer = new ChangedPerformer();
@@ -337,14 +337,15 @@ public class World {
 	 * @param entityBag
 	 * @param performer
 	 */
-	private void check(Bag<Entity> entityBag, Performer performer) {
+	private void check(WildBag<Entity> entityBag, Performer performer) {
 		Object[] entities = entityBag.getData();
 		for (int i = 0, s = entityBag.size(); s > i; i++) {
 			Entity e = (Entity)entities[i];
+			entities[i] = null; // avoid Bag#clear
 			notifyManagers(performer, e);
 			notifySystems(performer, e);
 		}
-		entityBag.clear();
+		entityBag.unsafeSetSize(0);
 	}
 
 	private void check(Entity e, Performer performer) {
@@ -480,5 +481,10 @@ public class World {
 		}
 
 	}
-
+	
+	private static class WildBag<E> extends Bag<E> {
+		void unsafeSetSize(int size) {
+			this.size = size;
+		}
+	}
 }
