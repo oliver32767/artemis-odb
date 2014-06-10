@@ -1,0 +1,16 @@
+rootProject.name = 'artemis-parent'
+include ':artemis-odb'
+include ':artemis-odb-weaver'
+//include ':artemis-odb-maven-plugin'
+include ':artemis-odb-test'
+include ':artemis-odb-matrix'
+include ':artemis-odb-gwt'
+include ':artemis-odb-benchmark'
+
+project(':artemis-odb').projectDir = "$rootDir/artemis" as File
+project(':artemis-odb-weaver').projectDir = "$rootDir/artemis-weaver" as File
+//project(':artemis-odb-maven-plugin').projectDir = "$rootDir/artemis-maven" as File
+project(':artemis-odb-test').projectDir = "$rootDir/artemis-test" as File
+project(':artemis-odb-matrix').projectDir = "$rootDir/artemis-matrix" as File
+project(':artemis-odb-gwt').projectDir = "$rootDir/artemis-gwt" as File
+project(':artemis-odb-benchmark').projectDir = "$rootDir/artemis-benchmark" as File
